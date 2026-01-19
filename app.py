@@ -1,29 +1,40 @@
-import random  # This library helps us generate random numbers
+import random
 from flask import Flask
 
 app = Flask(__name__)
 
+# This list will store our rolls in the server's memory
+roll_history = []
+
 @app.route("/")
 def roll_dice():
-    # Generate a random number between 1 and 20 (a d20!)
+    global roll_history
     roll = random.randint(1, 20)
     
-    # Choose a color based on the roll (Red for 1, Gold for 20)
+    # Add the new roll to the start of our list
+    roll_history.insert(0, roll)
+    
+    # Keep only the last 5 rolls
+    roll_history = roll_history[:5]
+    
+    # Create the HTML for the history list
+    history_html = "".join([f"<li>Roll: {r}</li>" for r in roll_history])
+
     color = "#2c3e50"
     if roll == 1: color = "red"
     if roll == 20: color = "gold"
 
     return f"""
     <html>
-        <body style="background-color: #f4f4f4; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 100px;">
-            <h1 style="color: #333;">D&D Dice Roller</h1>
-            <div style="font-size: 120px; color: {color}; margin: 20px;">
-                {roll}
+        <body style="background-color: #f4f4f4; text-align: center; font-family: sans-serif; padding-top: 50px;">
+            <h1>D&D Dice Roller</h1>
+            <div style="font-size: 100px; color: {color};">{roll}</div>
+            <button onclick="window.location.reload();" style="padding: 10px; font-size: 20px;">Roll Again</button>
+            
+            <div style="margin-top: 30px; display: inline-block; text-align: left; background: white; padding: 20px; border-radius: 10px; border: 1px solid #ccc;">
+                <h3>Recent Roll History:</h3>
+                <ul>{history_html}</ul>
             </div>
-            <p style="font-size: 20px;">You rolled a <strong>d20</strong>!</p>
-            <button onclick="window.location.reload();" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Roll Again</button>
-            <br><br>
-            <small>Refresh the page to roll again.</small>
         </body>
     </html>
     """
