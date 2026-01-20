@@ -1,45 +1,82 @@
-import random
-from flask import Flask
+from flask import Flask, url_for
 
 app = Flask(__name__)
 
-roll_history = []
-
 @app.route("/")
-def roll_dice():
-    global roll_history
-    roll = random.randint(1, 20)
-    roll_history.insert(0, roll)
-    roll_history = roll_history[:5]
-    
-    history_html = "".join([f"<li>Roll: {r}</li>" for r in roll_history])
-
-    # Default settings
-    color = "#2c3e50"
-    extra_text = ""  # This starts empty
-
-    # Special logic for rolling a 20
-    if roll == 20:
-        color = "gold"
-        # We add the text and the party popper emoji here
-        extra_text = "<h2>🎉 Jay Rutvik! Critical Hit! 🎉</h2>"
-    
-    if roll == 1:
-        color = "red"
-        extra_text = "<h2>Critical Fail! 💀</h2>"
-
+def gallery():
     return f"""
     <html>
-        <body style="background-color: #f4f4f4; text-align: center; font-family: sans-serif; padding-top: 50px;">
-            <h1>D&D Dice Roller</h1>
-            
-            {extra_text}  <div style="font-size: 100px; color: {color}; font-weight: bold;">{roll}</div>
-            
-            <button onclick="window.location.reload();" style="padding: 10px; font-size: 20px; cursor: pointer;">Roll Again</button>
-            
-            <div style="margin-top: 30px; display: inline-block; text-align: left; background: white; padding: 20px; border-radius: 10px; border: 1px solid #ccc;">
-                <h3>Recent Roll History:</h3>
-                <ul>{history_html}</ul>
+        <head>
+            <title>Goa Trip Gallery</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+                body {{ 
+                    background-color: #f0f2f5; 
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                    margin: 0; 
+                    padding: 40px 20px;
+                    color: #1c1e21;
+                }}
+                h1 {{ 
+                    margin-bottom: 30px; 
+                    font-weight: 300; 
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                }}
+                .gallery-container {{
+                    display: flex;
+                    justify-content: center;
+                    gap: 30px;
+                    flex-wrap: wrap;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }}
+                .photo-card {{
+                    background: white;
+                    padding: 15px;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    max-width: 400px;
+                }}
+                .photo-card:hover {{
+                    transform: translateY(-10px);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+                }}
+                .photo-card img {{
+                    width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                    display: block;
+                }}
+                .description {{
+                    padding: 15px 0 5px 0;
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #4b4f56;
+                }}
+                .location {{
+                    font-size: 14px;
+                    color: #90949c;
+                }}
+            </style>
+        </head>
+        <body>
+            <h1>🌴 Goa Trip 2026 🌴</h1>
+            <div class="gallery-container">
+                
+                <div class="photo-card">
+                    <img src="{url_for('static', filename='goa1.jpeg')}" alt="Trip to Goa">
+                    <div class="description">The Best Memories</div>
+                    <div class="location">📍 Mandovi River Bridge</div>
+                </div>
+
+                <div class="photo-card">
+                    <img src="{url_for('static', filename='goa2.jpeg')}" alt="Trip to Goa">
+                    <div class="description">Chasing Sunsets</div>
+                    <div class="location">📍 North Goa</div>
+                </div>
+
             </div>
         </body>
     </html>
