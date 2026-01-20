@@ -24,6 +24,8 @@ def roll_dice():
     if roll == 1: color = "red"
     if roll == 20: color = "gold"
 
+    print("Rutvik is chocolate boy")
+
     return f"""
     <html>
         <body style="background-color: #f4f4f4; text-align: center; font-family: sans-serif; padding-top: 50px;">
