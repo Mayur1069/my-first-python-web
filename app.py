@@ -6,6 +6,9 @@ app = Flask(__name__)
 # This list will store our rolls in the server's memory
 roll_history = []
 
+print("Rutvik is chocolate boy")
+
+
 @app.route("/")
 def roll_dice():
     global roll_history
@@ -24,7 +27,7 @@ def roll_dice():
     if roll == 1: color = "red"
     if roll == 20: color = "gold"
 
-    print("Rutvik is chocolate boy")
+    
 
     return f"""
     <html>
